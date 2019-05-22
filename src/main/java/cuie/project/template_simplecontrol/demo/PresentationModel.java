@@ -1,36 +1,72 @@
 package cuie.project.template_simplecontrol.demo;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.scene.paint.Color;
 
 public class PresentationModel {
-    private final DoubleProperty        pmValue   = new SimpleDoubleProperty();
-    private final ObjectProperty<Color> baseColor = new SimpleObjectProperty<>();
+    // all the properties waiting for being displayed
+    private final StringProperty demoTitle = new SimpleStringProperty("Power Station");
+    private final IntegerProperty leistung1 = new SimpleIntegerProperty();
+    private final IntegerProperty leistung2 = new SimpleIntegerProperty();
+    private final IntegerProperty leistung3 = new SimpleIntegerProperty();
+    private final IntegerProperty leistung4 = new SimpleIntegerProperty();
+    private final IntegerProperty leistungTotal = new SimpleIntegerProperty();
 
-    public double getPmValue() {
-        return pmValue.get();
+
+    // all getters and setters (generated via "Code -> Generate -> Getter and Setter)
+    public String getDemoTitle() {
+        return demoTitle.get();
+    }
+    public int getLeistung1() {
+        return leistung1.get();
+    }
+    public void setLeistung1(int leistung1) {
+        this.leistung1.set(leistung1);
+    }
+    public IntegerProperty leistung1Property () {
+        return leistung1;
+    }
+    public int getLeistung2() {
+        return leistung2.get();
+    }
+    public void setLeistung2(int leistung2) {
+        this.leistung2.set(leistung2);
+    }
+    public IntegerProperty leistung2Property () {
+        return leistung2;
+    }
+    public int getLeistung3() {
+        return leistung3.get();
+    }
+    public void setLeistung3(int leistung3) {
+        this.leistung3.set(leistung3);
+    }
+    public IntegerProperty leistung3Property () {
+        return leistung3;
+    }
+    public int getLeistung4() {
+        return leistung4.get();
+    }
+    public void setLeistung4(int leistung4) {
+        this.leistung4.set(leistung4);
+    }
+    public IntegerProperty leistung4Property () {
+        return leistung4;
     }
 
-    public DoubleProperty pmValueProperty() {
-        return pmValue;
+    public int getLeistungTotal() {
+        return leistungTotal.get();
     }
-
-    public void setPmValue(double pmValue) {
-        this.pmValue.set(pmValue);
+    public void setLeistungTotal(int leistungTotal) {
+        this.leistungTotal.set(leistungTotal);
     }
-
-    public Color getBaseColor() {
-        return baseColor.get();
+    public IntegerProperty leistungTotalProperty () {
+        return leistungTotal;
     }
-
-    public ObjectProperty<Color> baseColorProperty() {
-        return baseColor;
+    public StringProperty demoTitleProperty() {
+        return demoTitle;
     }
-
-    public void setBaseColor(Color baseColor) {
-        this.baseColor.set(baseColor);
+    public void setDemoTitle(String demoTitle) {
+        this.demoTitle.set(demoTitle);
     }
 }

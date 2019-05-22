@@ -1,8 +1,8 @@
-# CUIE Abschlussprojekt
+﻿# CUIE Abschlussprojekt
 
 
 ## Bearbeitet von
- - Vorname, Nachname
+Tabea Eggler & Benjamin Huber
  
 ## Integriert in die OOP2-Projekte von
 - _**Ergänzen Sie hier welche OOP2-Teams Ihr Custom Control erfolgreich integriert haben.**_
