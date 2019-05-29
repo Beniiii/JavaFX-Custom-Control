@@ -122,7 +122,7 @@ public class PowerStation extends Region {
 	}
 
 	private void initializeParts() {
-		double centerX =  34.5;
+		double centerX =  31.5;
 		double centerY = 50-(69/2);
 		
 		double sizeTextfield = 14;
@@ -133,7 +133,7 @@ public class PowerStation extends Region {
 		double positionBox4 = 0;
 
 
-		frame = new Rectangle(50-(37/2), 50-(69/2), 37, sizeFrame);
+		frame = new Rectangle(centerX, 50-(69/2), 37, sizeFrame);
 		frame.getStyleClass().addAll("frame");
 		frame.setArcHeight(3);
 		frame.setArcWidth(3);
@@ -146,16 +146,16 @@ public class PowerStation extends Region {
 		boxTotal.setArcHeight(2);
 		boxTotal.setArcWidth(2);
 		
-		box1 = new Rectangle(centerX, 0, 31, 0);
+		box1 = new Rectangle(centerX+3, 0, 31, 0);
 		box1.getStyleClass().addAll("box1");
 		
-		box2 = new Rectangle(centerX, 0, 31, 0);
+		box2 = new Rectangle(centerX+3, 0, 31, 0);
 		box2.getStyleClass().addAll("box2");
 		
-		box3 = new Rectangle(centerX, 0, 31, 0);
+		box3 = new Rectangle(centerX+3, 0, 31, 0);
 		box3.getStyleClass().addAll("box3");
 		
-		box4 = new Rectangle(centerX, 0, 31, 0);
+		box4 = new Rectangle(centerX+3, 0, 31, 0);
 		box4.getStyleClass().addAll("box2");
 		
 		boxes = new ArrayList<>();
@@ -255,7 +255,6 @@ public class PowerStation extends Region {
 	}
 
 	private void setupValueChangeListeners() {
-		double centerX = 34.5;
 		anzahlLadepunkte.addListener((observable, oldValue, newValue) -> {
 			updateArrays();
 //	        	boxes.add(new Rectangle(centerX, 0, 31, 0));
