@@ -91,6 +91,8 @@ public class PowerStation extends Region {
 	private TextField txtLeistung3;
 	private TextField txtLeistung4;
 	private Group svgs;
+	private Line elektrode1;
+	private Line elektrode2;
 	//TODO: Elektroden noch einfügen;
 
 	// properties
@@ -226,6 +228,14 @@ public class PowerStation extends Region {
         steckergehause.setFill(Color.rgb(221, 219, 219));
         steckergehause.setStroke(Color.TRANSPARENT);
         
+        elektrode1 = new Line(centerX + 55.75, centerY + 23.25, centerX + 55.75, centerY + 17.75);
+        elektrode1.setStrokeWidth(1);
+        elektrode1.setStroke(COLOR_GREY);
+
+        elektrode2 = new Line(centerX + 51, centerY + 23.25, centerX + 51, centerY + 17.75);
+        elektrode2.setStrokeWidth(1);
+        elektrode2.setStroke(COLOR_GREY);
+        
         svgs = new Group(kabel, steckergehause);
         svgs.setLayoutX(centerX-5);
         svgs.setLayoutY(centerY);
@@ -244,7 +254,7 @@ public class PowerStation extends Region {
 
 	private void layoutParts() {
 		drawingPane.getChildren().addAll(frame, socket, boxTotal, box1, box2, box3, box4,
-				svgs, steckertyp1, steckertyp2, steckertyp3, total, txtLeistung1, txtLeistung2, txtLeistung3, txtLeistung4);
+				svgs, elektrode1, elektrode2, steckertyp1, steckertyp2, steckertyp3, total, txtLeistung1, txtLeistung2, txtLeistung3, txtLeistung4);
 
 		getChildren().add(drawingPane);
 	}
