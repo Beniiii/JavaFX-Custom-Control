@@ -23,6 +23,8 @@ public class DemoPane extends BorderPane {
     private TextField leistung2;
     private TextField leistung3;
     private TextField leistung4;
+    private Label labelAnzahl;
+    private TextField anzahlLadepunkte;
 
 
     public DemoPane(PresentationModel pm) {
@@ -38,12 +40,14 @@ public class DemoPane extends BorderPane {
         leistung2  = new TextField();
         leistung3  = new TextField();
         leistung4  = new TextField();
+        labelAnzahl = new Label("Anzahl Ladepunkte");
+        anzahlLadepunkte = new TextField();
         powerStation = new PowerStation();
     }
 
     private void layoutControls() {
         VBox controlPane = new VBox(new Label("Set the power:"),
-                leistung1, leistung2, leistung3, leistung4);
+                leistung1, leistung2, leistung3, leistung4, labelAnzahl, anzahlLadepunkte);
         controlPane.setPadding(new Insets(0, 50, 0, 50));
         controlPane.setSpacing(10);
 
@@ -63,6 +67,9 @@ public class DemoPane extends BorderPane {
 
         leistung4.textProperty().bindBidirectional(pm.leistung4Property(), new NumberStringConverter());
         powerStation.leistung4Property().bindBidirectional(pm.leistung4Property());
+        
+        anzahlLadepunkte.textProperty().bindBidirectional(pm.anzahlLadepunkteProperty(), new NumberStringConverter());
+        powerStation.anzahlLadepunkteProperty().bind(pm.anzahlLadepunkteProperty());
     }
 
 }

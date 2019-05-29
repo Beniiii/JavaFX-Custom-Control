@@ -1,5 +1,7 @@
 package cuie.project.template_simplecontrol.demo;
 
+import javax.swing.text.SimpleAttributeSet;
+
 import javafx.beans.property.*;
 import javafx.scene.paint.Color;
 
@@ -11,6 +13,7 @@ public class PresentationModel {
     private final IntegerProperty leistung3 = new SimpleIntegerProperty();
     private final IntegerProperty leistung4 = new SimpleIntegerProperty();
     private final IntegerProperty leistungTotal = new SimpleIntegerProperty();
+    private final IntegerProperty anzahlLadepunkte = new SimpleIntegerProperty();
 
 
     // all getters and setters (generated via "Code -> Generate -> Getter and Setter)
@@ -62,6 +65,15 @@ public class PresentationModel {
     }
     public IntegerProperty leistungTotalProperty () {
         return leistungTotal;
+    }
+    public int getAnzahlLadepunkte() {
+        return anzahlLadepunkte.get();
+    }
+    public void setAnzahlLadepunkte(int anzahl) {
+        this.anzahlLadepunkte.set(anzahl);
+    }
+    public IntegerProperty anzahlLadepunkteProperty () {
+        return anzahlLadepunkte;
     }
     public StringProperty demoTitleProperty() {
         return demoTitle;
