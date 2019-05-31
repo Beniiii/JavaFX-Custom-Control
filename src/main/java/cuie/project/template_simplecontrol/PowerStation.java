@@ -318,6 +318,35 @@ public class PowerStation extends Region {
 				if(i != 0) {
 					sizeBox -= 1;
 				}
+				if(sizeBox < 7 && (leistungen.get(i) > 0)) {
+					double total;
+					double totalDifference;
+					total = totalCalculation * (100-(sizeBox / TOTAL_HEIGHT_BOXES)); 
+					total = totalCalculation * 1.0175;
+					totalDifference = 0.175 - (sizeBox / TOTAL_HEIGHT_BOXES);  
+					System.out.println("totalDifference: " + totalDifference);
+					sizeBox = 7;
+					position = 41.1;
+					for(int j = 0; j < i; j++) {
+						double ownHeight = boxes.get(j).getHeight();
+						double totalHeight = 33.0;
+						double percentageOwnHeight = ownHeight / totalHeight;
+						double heightDifference = TOTAL_HEIGHT_BOXES * totalDifference;
+						double newHeight = ownHeight - (percentageOwnHeight * heightDifference);
+						boxes.get(j).setHeight(newHeight);
+						boxes.get(j).setY(position);
+						
+						System.out.println("box: " + (j+1));
+						System.out.println("ownHeight: " + ownHeight);
+						System.out.println("percentageOwnHeight: " + percentageOwnHeight);
+						System.out.println("heightDifference: " + heightDifference);
+						System.out.println("newHeight: " + newHeight);
+						System.out.println("position: " + position);
+						System.out.println();
+						position += boxes.get(j).getHeight() + 1;  
+						
+					}
+				}
 				boxes.get(i).setHeight(sizeBox);
 				boxes.get(i).setY(position);
 				position += boxes.get(i).getHeight() + 1;  
@@ -333,10 +362,6 @@ public class PowerStation extends Region {
 	private void updateArrays() {
 		boxes.clear();
 		leistungen.clear();
-		System.out.println(boxes);
-		System.out.println(leistungen);
-		System.out.println("__________________________________________________________");
-		System.out.println("Ladepunkte: " + getAnzahlLadepunkte());
 		switch (getAnzahlLadepunkte()) {
     	case 1: 
     		boxes.add(box1);
@@ -367,9 +392,6 @@ public class PowerStation extends Region {
     		leistungen.add(getLeistung4());
     		break;
     	}
-		System.out.println(boxes);
-		System.out.println(leistungen);
-		System.out.println("__________________________________________________________");
 	}
 
 	// resize by scaling
