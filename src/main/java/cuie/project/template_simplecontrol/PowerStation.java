@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -317,9 +318,20 @@ public class PowerStation extends Region {
 
 
 	private void setupBinding() {
+		txtLeistung1.setTextFormatter(new TextFormatter<>(change ->
+        (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null));
 		txtLeistung1.textProperty().bindBidirectional(leistung1Property(), new NumberStringConverter());
+		
+		txtLeistung2.setTextFormatter(new TextFormatter<>(change ->
+        (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null));
 		txtLeistung2.textProperty().bindBidirectional(leistung2Property(), new NumberStringConverter());
+		
+		txtLeistung3.setTextFormatter(new TextFormatter<>(change ->
+        (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null));
 		txtLeistung3.textProperty().bindBidirectional(leistung3Property(), new NumberStringConverter());
+		
+		txtLeistung4.setTextFormatter(new TextFormatter<>(change ->
+        (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null));
 		txtLeistung4.textProperty().bindBidirectional(leistung4Property(), new NumberStringConverter());
 		
 	}
