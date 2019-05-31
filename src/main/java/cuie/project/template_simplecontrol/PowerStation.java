@@ -313,43 +313,47 @@ public class PowerStation extends Region {
 	public void changeBoxSize() {
 		if(totalCalculation > 0) {
 			double position = 41.1;
+			int countPiccolos = 0;
+			ArrayList<Integer> piccoloPositions = new ArrayList();
 			for(int i = 0; i < getAnzahlLadepunkte(); i++) {
 				double sizeBox = ((double)leistungen.get(i) / totalCalculation) * TOTAL_HEIGHT_BOXES;
 				if(i != 0) {
 					sizeBox -= 1;
 				}
 				if(sizeBox < 7 && (leistungen.get(i) > 0)) {
-					double total;
-					double totalDifference;
-					total = totalCalculation * (100-(sizeBox / TOTAL_HEIGHT_BOXES)); 
-					total = totalCalculation * 1.0175;
-					totalDifference = 0.175 - (sizeBox / TOTAL_HEIGHT_BOXES);  
-					System.out.println("totalDifference: " + totalDifference);
-					sizeBox = 7;
-					position = 41.1;
-					for(int j = 0; j < i; j++) {
-						double ownHeight = boxes.get(j).getHeight();
-						double totalHeight = 33.0;
-						double percentageOwnHeight = ownHeight / totalHeight;
-						double heightDifference = TOTAL_HEIGHT_BOXES * totalDifference;
-						double newHeight = ownHeight - (percentageOwnHeight * heightDifference);
-						boxes.get(j).setHeight(newHeight);
-						boxes.get(j).setY(position);
-						
-						System.out.println("box: " + (j+1));
-						System.out.println("ownHeight: " + ownHeight);
-						System.out.println("percentageOwnHeight: " + percentageOwnHeight);
-						System.out.println("heightDifference: " + heightDifference);
-						System.out.println("newHeight: " + newHeight);
-						System.out.println("position: " + position);
-						System.out.println();
-						position += boxes.get(j).getHeight() + 1;  
-						
-					}
+					countPiccolos++;
+					piccoloPositions.add(i);
 				}
 				boxes.get(i).setHeight(sizeBox);
 				boxes.get(i).setY(position);
 				position += boxes.get(i).getHeight() + 1;  
+			}
+			if(countPiccolos > 0) {
+				position = 41.1;
+				double totalHeightPiccolos = 0;
+				for (Integer index : piccoloPositions) {
+					totalHeightPiccolos += boxes.get(index).getHeight();
+				}
+				double totalHeight = TOTAL_HEIGHT_BOXES - (countPiccolos * 7);
+				double totalDifference;
+				totalDifference = (0.175 * countPiccolos) - (totalHeightPiccolos / TOTAL_HEIGHT_BOXES);
+				for(int j = 0; j < getAnzahlLadepunkte(); j++) {
+					double sizeBox = boxes.get(j).getHeight();
+					double newHeight = 0;
+					if(sizeBox > 7) {
+						double ownHeight = boxes.get(j).getHeight();
+						double percentageOwnHeight = ownHeight / totalHeight;
+						double heightDifference = totalHeight * totalDifference;
+						newHeight = ownHeight - (percentageOwnHeight * heightDifference);
+					} else {
+						newHeight = 7;
+						
+					}
+					boxes.get(j).setHeight(newHeight);
+					boxes.get(j).setY(position);
+					position += boxes.get(j).getHeight() + 1;
+					
+				}
 			}
 		} else {
 
