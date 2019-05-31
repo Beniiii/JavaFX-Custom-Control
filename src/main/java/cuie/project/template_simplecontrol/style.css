@@ -7,6 +7,7 @@
     -color-blue: rgb(73, 91, 115);
     -color-red: rgb(197, 160, 157);
     -color-yellow: rgb(192, 174, 154);
+    -color-green: rgb(163, 166, 96);
     -color-disabled: rgb(85, 85, 85);
 
 }
@@ -37,6 +38,10 @@
     -fx-fill: -color-yellow;
 }
 
+.powerstation .box4 {
+    -fx-fill: -color-green;
+}
+
 .powerstation .steckertyp {
     -fx-background-color: transparent;
     -fx-fill: transparent;
@@ -65,4 +70,5 @@
     -fx-background-color: transparent;
     -fx-font-size: 5;
     -fx-pref-height: 14;
+    -fx-text-fill: -color-lightgrey;
 }

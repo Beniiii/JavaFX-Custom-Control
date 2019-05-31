@@ -159,7 +159,7 @@ public class PowerStation extends Region {
 		box3.getStyleClass().addAll("box3");
 		
 		box4 = new Rectangle(centerX+3, 0, 31, 0);
-		box4.getStyleClass().addAll("box2");
+		box4.getStyleClass().addAll("box4");
 		
 		total = new Text();
 		calculateTotal();
@@ -338,7 +338,7 @@ public class PowerStation extends Region {
 	
 	public void calculateTotal() {
 		totalCalculation = leistung1.get() + leistung2.get() + leistung3.get() + leistung4.get();
-		total.setText("Total: "+ '\n' + Integer.toString(totalCalculation) + " kW");
+		total.setText("Total:"+ '\n' + Integer.toString(totalCalculation) + " kW");
     }
 	
 	public void changeBoxSize() {
