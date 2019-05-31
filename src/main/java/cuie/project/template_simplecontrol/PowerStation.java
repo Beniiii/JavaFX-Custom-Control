@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
@@ -60,7 +61,7 @@ public class PowerStation extends Region {
 	private final IntegerProperty leistung4 = new SimpleIntegerProperty();
 	private final IntegerProperty anzahlLadepunkte = new SimpleIntegerProperty();
 	
-	private double totalCalculation = 0;
+	private int totalCalculation = 0;
 	private static int TOTAL_HEIGHT_BOXES = 40;
 	
 	private double sizeBox1 = 7;
@@ -70,19 +71,17 @@ public class PowerStation extends Region {
 	
 	private ArrayList<Rectangle> boxes;
 	private ArrayList<Integer> leistungen;
+	private ArrayList<TextField> textFields;
 
 
 	// shapes
 	private Rectangle frame;
 	private Rectangle socket;
 	private Rectangle boxTotal;
-	private Rectangle box1;
+	private Rectangle box1; 
 	private Rectangle box2;
 	private Rectangle box3;
 	private Rectangle box4;
-	private Circle steckertyp1;
-	private Circle steckertyp2;
-	private Circle steckertyp3; 
 	private SVGPath kabel;
 	private SVGPath steckergehause;
 	private Text total;
@@ -110,6 +109,7 @@ public class PowerStation extends Region {
 		setupEventHandlers();
 		setupValueChangeListeners();
 		setupBinding();
+		initializer();
 	}
 
 	private void initializeSelf() {
@@ -160,27 +160,6 @@ public class PowerStation extends Region {
 		box4 = new Rectangle(centerX+3, 0, 31, 0);
 		box4.getStyleClass().addAll("box2");
 		
-		boxes = new ArrayList<>();
-		leistungen = new ArrayList<>();
-		
-		steckertyp1 = new Circle(50-(15/2), centerY+31, 2.9);
-		steckertyp1.getStyleClass().addAll("steckertyp");
-		steckertyp1.setStrokeWidth(0.2); 
-		steckertyp1.setStroke(Color.rgb(221, 219, 219));
-		steckertyp1.setFill(Color.TRANSPARENT);
-		
-		steckertyp2 = new Circle(50-(15/2), centerY+43, 2.9);
-		steckertyp2.getStyleClass().addAll("steckertyp");
-		steckertyp2.setStrokeWidth(0.2); 
-		steckertyp2.setStroke(Color.rgb(221, 219, 219));
-		steckertyp2.setFill(Color.TRANSPARENT);
-		
-		steckertyp3 = new Circle(50-(15/2), centerY+57, 2.9);
-		steckertyp3.getStyleClass().addAll("steckertyp");
-		steckertyp3.setStrokeWidth(0.2); 
-		steckertyp3.setStroke(Color.rgb(221, 219, 219));
-		steckertyp3.setFill(Color.TRANSPARENT);
-		
 		total = new Text();
 		calculateTotal();
 		total.setX(40);
@@ -203,20 +182,24 @@ public class PowerStation extends Region {
 		txtLeistung1.setLayoutY(positionBox1 + (sizeBox1/2) - (sizeTextfield/2));
 		txtLeistung1.getStyleClass().addAll("text-leistung");
 		
-		txtLeistung2 = new TextField("25 kW");
+		txtLeistung2 = new TextField();
 		txtLeistung2.setLayoutX(45);
 		txtLeistung2.setLayoutY(positionBox2 + (sizeBox2/2) - (sizeTextfield/2));
 		txtLeistung2.getStyleClass().addAll("text-leistung");
 		
-		txtLeistung3 = new TextField("48 kW");
+		txtLeistung3 = new TextField();
 		txtLeistung3.setLayoutX(45);
 		txtLeistung3.setLayoutY(positionBox3 + (sizeBox3/2) - (sizeTextfield/2));
 		txtLeistung3.getStyleClass().addAll("text-leistung");
 		
-		txtLeistung4 = new TextField("12 KW");
+		txtLeistung4 = new TextField();
 		txtLeistung4.setLayoutX(45);
 		txtLeistung4.setLayoutY(positionBox4 + (sizeBox4/2) - (sizeTextfield/2));
 		txtLeistung4.getStyleClass().addAll("text-leistung");
+		
+		boxes = new ArrayList<>();
+		leistungen = new ArrayList<>();
+		textFields = new ArrayList<>();
 		
 		kabel = new SVGPath();
 		kabel.setContent("M57.1479 47.1146V32.05H59.95V47C59.95 48.5027 59.9493 49.8675 59.5158 50.9924C59.0846 52.1115 58.2227 52.9976 56.4852 53.5352C56.2323 53.6134 55.8438 53.667 55.3787 53.6992C54.9145 53.7314 54.3775 53.7421 53.8292 53.7359C52.7322 53.7235 51.5936 53.6435 50.9079 53.5336C49.3508 53.2838 48.4388 52.4008 47.9137 51.221C47.3871 50.0378 47.25 48.556 47.25 47.1154V32C47.25 31.8793 47.2525 31.747 47.2552 31.6063C47.2671 30.9745 47.2823 30.1728 47.0881 29.4846C46.9688 29.0622 46.7697 28.6775 46.4389 28.3986C46.1075 28.1191 45.6491 27.95 45.0196 27.95H42.05V25.05H45.0196C46.7537 25.05 48.0594 25.4301 48.9321 26.2751C49.8045 27.1199 50.2538 28.4387 50.2538 30.3382L50.2538 47.1154L50.2539 47.1168L50.3038 47.1154L50.2539 47.1169L50.2539 47.117L50.2539 47.1173L50.2539 47.1184L50.254 47.123L50.2546 47.1405C50.2552 47.1559 50.2561 47.1786 50.2574 47.2076C50.26 47.2658 50.2644 47.3497 50.2713 47.4529C50.2851 47.6593 50.3092 47.9433 50.3502 48.2534C50.3912 48.5633 50.4493 48.9002 50.5311 49.2122C50.6128 49.5235 50.7191 49.8134 50.8581 50.0273C51.1372 50.4566 51.6261 50.7113 52.1639 50.8591C52.7025 51.0071 53.2977 51.05 53.8 51.05C54.804 51.05 55.7768 50.9096 56.5378 50.0328C56.7127 49.8312 56.8366 49.5461 56.925 49.2364C57.0136 48.9259 57.0677 48.5864 57.1006 48.2726C57.1336 47.9586 57.1454 47.6691 57.1489 47.4581C57.1507 47.3526 57.1505 47.2667 57.1497 47.207C57.1494 47.1772 57.1489 47.154 57.1485 47.1381L57.148 47.12L57.1479 47.1154L57.1479 47.1146Z");
@@ -254,7 +237,7 @@ public class PowerStation extends Region {
 
 	private void layoutParts() {
 		drawingPane.getChildren().addAll(frame, socket, boxTotal, box1, box2, box3, box4,
-				svgs, elektrode1, elektrode2, steckertyp1, steckertyp2, steckertyp3, total, txtLeistung1, txtLeistung2, txtLeistung3, txtLeistung4);
+				svgs, elektrode1, elektrode2, total, txtLeistung1, txtLeistung2, txtLeistung3, txtLeistung4);
 
 		getChildren().add(drawingPane);
 	}
@@ -266,33 +249,69 @@ public class PowerStation extends Region {
 
 	private void setupValueChangeListeners() {
 		anzahlLadepunkte.addListener((observable, oldValue, newValue) -> {
+			System.out.println(newValue.intValue());
+			if(newValue.intValue() < 1) {
+				box1.setHeight(0);
+				box2.setHeight(0);
+				box3.setHeight(0);
+				box4.setHeight(0);
+				txtLeistung1.setVisible(false);
+				txtLeistung2.setVisible(false);
+				txtLeistung3.setVisible(false);
+				txtLeistung4.setVisible(false);
+			}
+			if(oldValue.intValue() < newValue.intValue()) {
+				if(newValue.intValue() == 1) {
+					box2.setHeight(0);
+					box3.setHeight(0);
+					box4.setHeight(0);
+					txtLeistung2.setVisible(false);
+					txtLeistung3.setVisible(false);
+					txtLeistung4.setVisible(false);
+				}
+				if(newValue.intValue() == 2) {
+					box3.setHeight(0);
+					box4.setHeight(0);
+					txtLeistung3.setVisible(false);
+					txtLeistung4.setVisible(false);
+				}
+				if(newValue.intValue() == 3) {
+					box4.setHeight(0);
+					txtLeistung4.setVisible(false);
+				}
+			}
 			updateArrays();
-//	        	boxes.add(new Rectangle(centerX, 0, 31, 0));
+			changeBoxSize();
+			updateTextPosition();
 	       
        });
 		
 		leistung1.addListener((observable, oldValue, newValue) -> {
 			updateArrays(); 
 			calculateTotal();
-             changeBoxSize();
+            changeBoxSize();
+            updateTextPosition();
         });
 		
 		leistung2.addListener((observable, oldValue, newValue) -> {
 			updateArrays();
 			calculateTotal();
 			changeBoxSize();
+			updateTextPosition();
        });
 		
 		leistung3.addListener((observable, oldValue, newValue) -> {
 			updateArrays();
 			calculateTotal();
 			changeBoxSize();
+			updateTextPosition();
 		});
 		
 		leistung4.addListener((observable, oldValue, newValue) -> {
 			updateArrays();
 			calculateTotal();
 			changeBoxSize();
+			updateTextPosition();
 		});
 	}
 
@@ -307,7 +326,7 @@ public class PowerStation extends Region {
 	
 	public void calculateTotal() {
 		totalCalculation = leistung1.get() + leistung2.get() + leistung3.get() + leistung4.get();
-		total.setText("Total: "+ '\n' + Double.toString(totalCalculation) + " kW");
+		total.setText("Total: "+ '\n' + Integer.toString(totalCalculation) + " kW");
     }
 	
 	public void changeBoxSize() {
@@ -317,7 +336,7 @@ public class PowerStation extends Region {
 			int countPiccolos = 0;
 			ArrayList<Integer> piccoloPositions = new ArrayList<Integer>();
 			for(int i = 0; i < getAnzahlLadepunkte(); i++) {
-				double sizeBox = (leistungen.get(i) / totalCalculation) * TOTAL_HEIGHT_BOXES;
+				double sizeBox = ((double)leistungen.get(i) / totalCalculation) * TOTAL_HEIGHT_BOXES;
 				if(i != 0) {
 					sizeBox -= 1;
 				}
@@ -370,19 +389,47 @@ public class PowerStation extends Region {
 		
 	}
 	
+	private void updateTextPosition() {
+		for(int i = 0; i < textFields.size(); i++) {
+			double position = boxes.get(i).getY() + (boxes.get(i).getHeight() / 2) - (textFields.get(i).getHeight() / 2);
+			textFields.get(i).setLayoutY(position);
+			int value = leistungen.get(i);
+			if(value <= 0) {
+				textFields.get(i).setVisible(false);
+				boxes.get(i).setHeight(0);
+			}
+			if(0 < value && value <= 9) {
+				textFields.get(i).setLayoutX(45);
+			}
+			if(10 <= value && value <= 99) {
+				textFields.get(i).setLayoutX(43.5);
+			}
+			if(100 <= value && value <= 999) {
+				textFields.get(i).setLayoutX(42);
+			}
+		}
+	}
+	
 	private void updateArrays() {
 		boxes.clear();
 		leistungen.clear();
+		textFields.clear();
 		switch (getAnzahlLadepunkte()) {
     	case 1: 
     		boxes.add(box1);
     		leistungen.add(getLeistung1());
+    		textFields.add(txtLeistung1);
+    		txtLeistung1.setVisible(true);
     		break;
     	case 2: 
     		boxes.add(box1);
     		boxes.add(box2);
     		leistungen.add(getLeistung1());
     		leistungen.add(getLeistung2());
+    		textFields.add(txtLeistung1);
+    		textFields.add(txtLeistung2);
+    		txtLeistung1.setVisible(true);
+    		txtLeistung2.setVisible(true);
     		break;
     	case 3: 
     		boxes.add(box1);
@@ -391,6 +438,12 @@ public class PowerStation extends Region {
     		leistungen.add(getLeistung1());
     		leistungen.add(getLeistung2());
     		leistungen.add(getLeistung3());
+    		textFields.add(txtLeistung1);
+    		textFields.add(txtLeistung2);
+    		textFields.add(txtLeistung3);
+    		txtLeistung1.setVisible(true);
+    		txtLeistung2.setVisible(true);
+    		txtLeistung3.setVisible(true);
     		break;
     	case 4: 
     		boxes.add(box1);
@@ -401,8 +454,39 @@ public class PowerStation extends Region {
     		leistungen.add(getLeistung2());
     		leistungen.add(getLeistung3());
     		leistungen.add(getLeistung4());
+    		textFields.add(txtLeistung1);
+    		textFields.add(txtLeistung2);
+    		textFields.add(txtLeistung3);
+    		textFields.add(txtLeistung4);
+    		txtLeistung1.setVisible(true);
+    		txtLeistung2.setVisible(true);
+    		txtLeistung3.setVisible(true);
+    		txtLeistung4.setVisible(true);
     		break;
     	}
+	}
+	
+	private void initializer() {
+		if(getLeistung1() <= 0) {
+			txtLeistung1.setVisible(false);
+			box1.setHeight(0);
+		}
+		if(getLeistung2() <= 0) {
+			txtLeistung2.setVisible(false);
+			box2.setHeight(0);
+		}
+		if(getLeistung3() <= 0) {
+			txtLeistung3.setVisible(false);
+			box3.setHeight(0);
+		}
+		if(getLeistung4() <= 0) {
+			txtLeistung4.setVisible(false);
+			box4.setHeight(0);
+		}
+		updateArrays();
+		calculateTotal();
+		changeBoxSize();
+		updateTextPosition();
 	}
 
 	// resize by scaling
