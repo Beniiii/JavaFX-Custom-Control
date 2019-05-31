@@ -60,7 +60,7 @@ public class PowerStation extends Region {
 	private final IntegerProperty leistung4 = new SimpleIntegerProperty();
 	private final IntegerProperty anzahlLadepunkte = new SimpleIntegerProperty();
 	
-	private int totalCalculation = 0;
+	private double totalCalculation = 0;
 	private static int TOTAL_HEIGHT_BOXES = 40;
 	
 	private double sizeBox1 = 7;
@@ -307,16 +307,17 @@ public class PowerStation extends Region {
 	
 	public void calculateTotal() {
 		totalCalculation = leistung1.get() + leistung2.get() + leistung3.get() + leistung4.get();
-		total.setText("Total: "+ '\n' + Integer.toString(totalCalculation) + " kW");
+		total.setText("Total: "+ '\n' + Double.toString(totalCalculation) + " kW");
     }
 	
 	public void changeBoxSize() {
+		System.out.println("----------------------------------------");
 		if(totalCalculation > 0) {
 			double position = 41.1;
 			int countPiccolos = 0;
-			ArrayList<Integer> piccoloPositions = new ArrayList();
+			ArrayList<Integer> piccoloPositions = new ArrayList<Integer>();
 			for(int i = 0; i < getAnzahlLadepunkte(); i++) {
-				double sizeBox = ((double)leistungen.get(i) / totalCalculation) * TOTAL_HEIGHT_BOXES;
+				double sizeBox = (leistungen.get(i) / totalCalculation) * TOTAL_HEIGHT_BOXES;
 				if(i != 0) {
 					sizeBox -= 1;
 				}
@@ -329,14 +330,14 @@ public class PowerStation extends Region {
 				position += boxes.get(i).getHeight() + 1;  
 			}
 			if(countPiccolos > 0) {
+				double sumNewHeights = 0;
 				position = 41.1;
 				double totalHeightPiccolos = 0;
 				for (Integer index : piccoloPositions) {
 					totalHeightPiccolos += boxes.get(index).getHeight();
 				}
 				double totalHeight = TOTAL_HEIGHT_BOXES - (countPiccolos * 7);
-				double totalDifference;
-				totalDifference = (0.175 * countPiccolos) - (totalHeightPiccolos / TOTAL_HEIGHT_BOXES);
+				double totalDifference = (0.175 * countPiccolos) - (totalHeightPiccolos / TOTAL_HEIGHT_BOXES); // %-Satz
 				for(int j = 0; j < getAnzahlLadepunkte(); j++) {
 					double sizeBox = boxes.get(j).getHeight();
 					double newHeight = 0;
@@ -345,9 +346,19 @@ public class PowerStation extends Region {
 						double percentageOwnHeight = ownHeight / totalHeight;
 						double heightDifference = totalHeight * totalDifference;
 						newHeight = ownHeight - (percentageOwnHeight * heightDifference);
+						sumNewHeights += newHeight;
+						System.out.println("box: " + (j+1));
+						System.out.println("ownHeight: " + ownHeight);
+						System.out.println("percentageOwnHeight: " + percentageOwnHeight);
+						System.out.println("heightDifference: " + heightDifference);
+						System.out.println("newHeight: " + newHeight);
+						System.out.println();
 					} else {
 						newHeight = 7;
 						
+					}
+					if(j == getAnzahlLadepunkte()-1) {
+						newHeight = 81.1 - position;
 					}
 					boxes.get(j).setHeight(newHeight);
 					boxes.get(j).setY(position);
@@ -355,11 +366,7 @@ public class PowerStation extends Region {
 					
 				}
 			}
-		} else {
-
-		}
-
-
+		} 
 		
 	}
 	
