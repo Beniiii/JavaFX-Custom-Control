@@ -35,17 +35,10 @@ public class PowerStation extends Region {
 	private static final double ARTBOARD_HEIGHT = 100;
 	private static final double ASPECT_RATIO = ARTBOARD_WIDTH / ARTBOARD_HEIGHT;
 	private static final double MINIMUM_WIDTH = 200;
-	private static final double MINIMUM_HEIGHT = MINIMUM_WIDTH / ASPECT_RATIO;
 	private static final double MAXIMUM_WIDTH = 800;
 
-	//colors
+	//colors (others are in css defined)
 	private static final Color COLOR_GREY = Color.rgb(221, 219, 219);
-	private static final Color COLOR_LIGHTGREY = Color.rgb(243, 243, 243);
-	private static final Color COLOR_BLUE = Color.rgb(73, 91, 115);
-	private static final Color COLOR_RED = Color.rgb(197, 160, 157);
-	private static final Color COLOR_YELLOW = Color.rgb(192, 174, 154);
-	private static final Color COLOR_BACK = Color.rgb(51, 51, 51);
-	private static final Color COlOR_DISABLED = Color.rgb(85, 85, 85);
 
 	//properties
 	private final IntegerProperty leistung1 = new SimpleIntegerProperty();

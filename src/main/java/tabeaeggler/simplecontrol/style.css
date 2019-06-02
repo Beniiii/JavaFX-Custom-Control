@@ -9,7 +9,6 @@
     -color-yellow: rgb(192, 174, 154);
     -color-green: rgb(163, 166, 96);
     -color-disabled: rgb(85, 85, 85);
-
 }
 
 .powerstation .frame {
@@ -50,25 +49,22 @@
 }
 
 .powerstation .total {
-    -fx-font: 5px Tahoma;
-    -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%);
     -fx-text-alignment: center;
     -fx-font-size: 10.5px;
     -fx-font-weight: normal;
     -fx-font-style: normal;
-
 }
 
 .powerstation .display {
-    -fx-font-family: 'Lato Light';
+    -fx-font-family: 'Open Sans';
     -fx-font-size: 24;
     -fx-fill: derive(-base-color, 95%);
 }
-
 
 .powerstation .text-leistung {
     -fx-background-color: transparent;
     -fx-font-size: 5;
     -fx-pref-height: 14;
+    -fx-font-family: 'Open Sans';
     -fx-text-fill: -color-lightgrey;
 }
