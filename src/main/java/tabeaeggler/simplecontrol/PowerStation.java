@@ -1,9 +1,8 @@
 package tabeaeggler.simplecontrol;
 
 import java.util.ArrayList;
-import javafx.beans.property.BooleanProperty;
+
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -54,19 +53,31 @@ public class PowerStation extends Region {
 	private final IntegerProperty leistung3 = new SimpleIntegerProperty();
 	private final IntegerProperty leistung4 = new SimpleIntegerProperty();
 	private final IntegerProperty anzahlLadepunkte = new SimpleIntegerProperty();
-	
+
+	//calculation variables
+    private static int TOTAL_HEIGHT_BOXES = 40;
 	private int totalCalculation = 0;
-	private static int TOTAL_HEIGHT_BOXES = 40;
-	
 	private double sizeBox1;
 	private double sizeBox2;
 	private double sizeBox3;
 	private double sizeBox4;
-	
+    double positionBox1;
+    double positionBox2;
+    double positionBox3;
+    double positionBox4;
+
+    //center position
+    double centerX;
+    double centerY;
+
+    //sizes
+    double sizeTextfield;
+    double sizeFrame;
+
+	//arrays
 	private ArrayList<Rectangle> boxes;
 	private ArrayList<Integer> leistungen;
 	private ArrayList<TextField> textFields;
-
 
 	// shapes
 	private Rectangle frame;
@@ -78,22 +89,18 @@ public class PowerStation extends Region {
 	private Rectangle box4;
 	private SVGPath kabel;
 	private SVGPath steckergehause;
-	private Text total;
+	private Text txtTotal;
 	private TextField txtLeistung1;
 	private TextField txtLeistung2;
 	private TextField txtLeistung3;
 	private TextField txtLeistung4;
-	private Group svgs;
+	private Group svgGroup;
 	private Line elektrode1;
 	private Line elektrode2;
-	//TODO: Elektroden noch einfügen;
 
-	// properties
-	private BooleanProperty stop = new SimpleBooleanProperty();
-	private BooleanProperty go = new SimpleBooleanProperty();
-
-	// needed for resizing
+	//needed for resizing
 	private Pane drawingPane;
+
 
 	public PowerStation() {
 		initializeSelf();
@@ -106,6 +113,7 @@ public class PowerStation extends Region {
 		initializer();
 	}
 
+
 	private void initializeSelf() {
 		String fonts = getClass().getResource("/fonts/fonts.css").toExternalForm();
 		getStylesheets().add(fonts);
@@ -114,21 +122,33 @@ public class PowerStation extends Region {
 		getStylesheets().add(stylesheet);
 
 		getStyleClass().add("powerstation");
-
 	}
 
+
 	private void initializeParts() {
-		double centerX =  31.5;
-		double centerY = 50-(69/2);
-		
-		double sizeTextfield = 14;
-		double sizeFrame = 69;
-		double positionBox1 = centerY+25;
-		double positionBox2 = centerY+38;
-		double positionBox3 = centerY+49;
-		double positionBox4 = 0;
+		centerX =  31.5;
+		centerY = 50-(69/2);
+		sizeTextfield = 14;
+		sizeFrame = 69;
 
+		//text
+        txtLeistung1 = new TextField();
+        txtLeistung1.getStyleClass().addAll("text-leistung");
+        txtLeistung2 = new TextField();
+        txtLeistung2.getStyleClass().addAll("text-leistung");
+        txtLeistung3 = new TextField();
+        txtLeistung3.getStyleClass().addAll("text-leistung");
+        txtLeistung4 = new TextField();
+        txtLeistung4.getStyleClass().addAll("text-leistung");
 
+        txtTotal = new Text();
+        txtTotal.setX(40);
+        txtTotal.setY(centerY+3+7.8);
+        txtTotal.setFont(Font.font("Open Sans", FontWeight.NORMAL, 5.5));
+        txtTotal.setTextAlignment(TextAlignment.CENTER);
+        txtTotal.setWrappingWidth(20);
+
+        //design elements
 		frame = new Rectangle(centerX, 50-(69/2), 37, sizeFrame);
 		frame.getStyleClass().addAll("frame");
 		frame.setArcHeight(3);
@@ -144,56 +164,12 @@ public class PowerStation extends Region {
 		
 		box1 = new Rectangle(centerX+3, 0, 31, 0);
 		box1.getStyleClass().addAll("box1");
-		
 		box2 = new Rectangle(centerX+3, 0, 31, 0);
 		box2.getStyleClass().addAll("box2");
-		
 		box3 = new Rectangle(centerX+3, 0, 31, 0);
 		box3.getStyleClass().addAll("box3");
-		
 		box4 = new Rectangle(centerX+3, 0, 31, 0);
 		box4.getStyleClass().addAll("box4");
-		
-		total = new Text();
-		calculateTotal();
-		total.setX(40);
-		total.setY(centerY+3+7.8);
-		total.setFont(Font.font("Open Sans", FontWeight.NORMAL, 5.5));
-		total.setTextAlignment(TextAlignment.CENTER);
-		total.setWrappingWidth(20);
-		
-//		total = new Text("Total: " + "103" + " kW");
-//		total.setX(40);
-//		total.setY(centerY+3+7.8);
-//		total.setFont(Font.font("Open Sans", FontWeight.NORMAL, 5.5));
-//		total.setTextAlignment(TextAlignment.CENTER);
-//		total.setWrappingWidth(20);
-		
-		//total.setId("total-text"); <-- ??????
-		
-		txtLeistung1 = new TextField();
-		txtLeistung1.setLayoutX(45);
-		txtLeistung1.setLayoutY(positionBox1 + (sizeBox1/2) - (sizeTextfield/2));
-		txtLeistung1.getStyleClass().addAll("text-leistung");
-		
-		txtLeistung2 = new TextField();
-		txtLeistung2.setLayoutX(45);
-		txtLeistung2.setLayoutY(positionBox2 + (sizeBox2/2) - (sizeTextfield/2));
-		txtLeistung2.getStyleClass().addAll("text-leistung");
-		
-		txtLeistung3 = new TextField();
-		txtLeistung3.setLayoutX(45);
-		txtLeistung3.setLayoutY(positionBox3 + (sizeBox3/2) - (sizeTextfield/2));
-		txtLeistung3.getStyleClass().addAll("text-leistung");
-		
-		txtLeistung4 = new TextField();
-		txtLeistung4.setLayoutX(45);
-		txtLeistung4.setLayoutY(positionBox4 + (sizeBox4/2) - (sizeTextfield/2));
-		txtLeistung4.getStyleClass().addAll("text-leistung");
-		
-		boxes = new ArrayList<>();
-		leistungen = new ArrayList<>();
-		textFields = new ArrayList<>();
 		
 		kabel = new SVGPath();
 		kabel.setContent("M57.1479 47.1146V32.05H59.95V47C59.95 48.5027 59.9493 49.8675 59.5158 50.9924C59.0846 52.1115 58.2227 52.9976 56.4852 53.5352C56.2323 53.6134 55.8438 53.667 55.3787 53.6992C54.9145 53.7314 54.3775 53.7421 53.8292 53.7359C52.7322 53.7235 51.5936 53.6435 50.9079 53.5336C49.3508 53.2838 48.4388 52.4008 47.9137 51.221C47.3871 50.0378 47.25 48.556 47.25 47.1154V32C47.25 31.8793 47.2525 31.747 47.2552 31.6063C47.2671 30.9745 47.2823 30.1728 47.0881 29.4846C46.9688 29.0622 46.7697 28.6775 46.4389 28.3986C46.1075 28.1191 45.6491 27.95 45.0196 27.95H42.05V25.05H45.0196C46.7537 25.05 48.0594 25.4301 48.9321 26.2751C49.8045 27.1199 50.2538 28.4387 50.2538 30.3382L50.2538 47.1154L50.2539 47.1168L50.3038 47.1154L50.2539 47.1169L50.2539 47.117L50.2539 47.1173L50.2539 47.1184L50.254 47.123L50.2546 47.1405C50.2552 47.1559 50.2561 47.1786 50.2574 47.2076C50.26 47.2658 50.2644 47.3497 50.2713 47.4529C50.2851 47.6593 50.3092 47.9433 50.3502 48.2534C50.3912 48.5633 50.4493 48.9002 50.5311 49.2122C50.6128 49.5235 50.7191 49.8134 50.8581 50.0273C51.1372 50.4566 51.6261 50.7113 52.1639 50.8591C52.7025 51.0071 53.2977 51.05 53.8 51.05C54.804 51.05 55.7768 50.9096 56.5378 50.0328C56.7127 49.8312 56.8366 49.5461 56.925 49.2364C57.0136 48.9259 57.0677 48.5864 57.1006 48.2726C57.1336 47.9586 57.1454 47.6691 57.1489 47.4581C57.1507 47.3526 57.1505 47.2667 57.1497 47.207C57.1494 47.1772 57.1489 47.154 57.1485 47.1381L57.148 47.12L57.1479 47.1154L57.1479 47.1146Z");
@@ -213,12 +189,16 @@ public class PowerStation extends Region {
         elektrode2.setStrokeWidth(1);
         elektrode2.setStroke(COLOR_GREY);
         
-        svgs = new Group(kabel, steckergehause);
-        svgs.setLayoutX(centerX-5);
-        svgs.setLayoutY(centerY);
-        
-        
-		
+        svgGroup = new Group(kabel, steckergehause);
+        svgGroup.setLayoutX(centerX-5);
+        svgGroup.setLayoutY(centerY);
+
+        //arrays needed for loop helpers
+        boxes = new ArrayList<>();
+        leistungen = new ArrayList<>();
+        textFields = new ArrayList<>();
+
+
 	}
 
 	private void initializeDrawingPane() {
@@ -231,7 +211,7 @@ public class PowerStation extends Region {
 
 	private void layoutParts() {
 		drawingPane.getChildren().addAll(frame, socket, boxTotal, box1, box2, box3, box4,
-				svgs, elektrode1, elektrode2, total, txtLeistung1, txtLeistung2, txtLeistung3, txtLeistung4);
+                svgGroup, elektrode1, elektrode2, txtTotal, txtLeistung1, txtLeistung2, txtLeistung3, txtLeistung4);
 
 		getChildren().add(drawingPane);
 	}
@@ -331,7 +311,7 @@ public class PowerStation extends Region {
 	
 	public void calculateTotal() {
 		totalCalculation = leistung1.get() + leistung2.get() + leistung3.get() + leistung4.get();
-		total.setText("Total:"+ '\n' + Integer.toString(totalCalculation) + " kW");
+		txtTotal.setText("Total:"+ '\n' + Integer.toString(totalCalculation) + " kW");
     }
 	
 	public void changeBoxSize() {
