@@ -20,6 +20,13 @@ public class PresentationModel {
     public String getDemoTitle() {
         return demoTitle.get();
     }
+    public StringProperty demoTitleProperty() {
+        return demoTitle;
+    }
+    public void setDemoTitle(String demoTitle) {
+        this.demoTitle.set(demoTitle);
+    }
+
     public int getLeistung1() {
         return leistung1.get();
     }
@@ -66,6 +73,7 @@ public class PresentationModel {
     public IntegerProperty leistungTotalProperty () {
         return leistungTotal;
     }
+
     public int getAnzahlLadepunkte() {
         return anzahlLadepunkte.get();
     }
@@ -75,10 +83,5 @@ public class PresentationModel {
     public IntegerProperty anzahlLadepunkteProperty () {
         return anzahlLadepunkte;
     }
-    public StringProperty demoTitleProperty() {
-        return demoTitle;
-    }
-    public void setDemoTitle(String demoTitle) {
-        this.demoTitle.set(demoTitle);
-    }
+
 }

@@ -17,7 +17,7 @@ public class DemoPane extends BorderPane {
 
     private final PresentationModel pm;
 
-    // declare the custom control
+    // declare the custom controls
     private PowerStation powerStation;
     private TextField leistung1;
     private TextField leistung2;
@@ -40,9 +40,9 @@ public class DemoPane extends BorderPane {
         leistung2  = new TextField();
         leistung3  = new TextField();
         leistung4  = new TextField();
-        labelAnzahl = new Label("Anzahl Ladepunkte");
         anzahlLadepunkte = new TextField();
         powerStation = new PowerStation();
+        labelAnzahl = new Label("Anzahl Ladepunkte");
     }
 
     private void layoutControls() {
