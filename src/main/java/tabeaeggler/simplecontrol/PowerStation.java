@@ -73,6 +73,7 @@ public class PowerStation extends Region {
     //sizes
     double sizeTextfield;
     double sizeFrame;
+    double sizeTotal;
 
 	//arrays
 	private ArrayList<Rectangle> boxes;
@@ -107,7 +108,6 @@ public class PowerStation extends Region {
 		initializeParts();
 		initializeDrawingPane();
 		layoutParts();
-		setupEventHandlers();
 		setupValueChangeListeners();
 		setupBinding();
 		initializer();
@@ -130,6 +130,7 @@ public class PowerStation extends Region {
 		centerY = 50-(69/2);
 		sizeTextfield = 14;
 		sizeFrame = 69;
+		sizeTotal = 81.1;
 
 		//text
         txtLeistung1 = new TextField();
@@ -193,13 +194,12 @@ public class PowerStation extends Region {
         svgGroup.setLayoutX(centerX-5);
         svgGroup.setLayoutY(centerY);
 
-        //arrays needed for loop helpers
+        //arrays needed for loops (indexing)
         boxes = new ArrayList<>();
         leistungen = new ArrayList<>();
         textFields = new ArrayList<>();
-
-
 	}
+
 
 	private void initializeDrawingPane() {
 		drawingPane = new Pane();
@@ -209,21 +209,16 @@ public class PowerStation extends Region {
 		drawingPane.setPrefSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
 	}
 
+
 	private void layoutParts() {
 		drawingPane.getChildren().addAll(frame, socket, boxTotal, box1, box2, box3, box4,
                 svgGroup, elektrode1, elektrode2, txtTotal, txtLeistung1, txtLeistung2, txtLeistung3, txtLeistung4);
-
 		getChildren().add(drawingPane);
 	}
 
-	private void setupEventHandlers() {
-
-
-	}
 
 	private void setupValueChangeListeners() {
 		anzahlLadepunkte.addListener((observable, oldValue, newValue) -> {
-			System.out.println(newValue.intValue());
 			if(newValue.intValue() < 1) {
 				box1.setHeight(0);
 				box2.setHeight(0);
@@ -292,7 +287,7 @@ public class PowerStation extends Region {
 
 	private void setupBinding() {
 		txtLeistung1.setTextFormatter(new TextFormatter<>(change ->
-        (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null));
+        (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null)); //only numbers allowed
 		txtLeistung1.textProperty().bindBidirectional(leistung1Property(), new NumberStringConverter());
 		
 		txtLeistung2.setTextFormatter(new TextFormatter<>(change ->
@@ -306,8 +301,10 @@ public class PowerStation extends Region {
 		txtLeistung4.setTextFormatter(new TextFormatter<>(change ->
         (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null));
 		txtLeistung4.textProperty().bindBidirectional(leistung4Property(), new NumberStringConverter());
-		
 	}
+
+
+	//Helper Methods
 	
 	public void calculateTotal() {
 		totalCalculation = leistung1.get() + leistung2.get() + leistung3.get() + leistung4.get();
@@ -315,63 +312,63 @@ public class PowerStation extends Region {
     }
 	
 	public void changeBoxSize() {
-		System.out.println("----------------------------------------");
 		if(totalCalculation > 0) {
 			double position = 41.1;
-			int countPiccolos = 0;
-			ArrayList<Integer> piccoloPositions = new ArrayList<Integer>();
+			int countTooSmallValues = 0;
+			ArrayList<Integer> tooSmallValuesPositions = new ArrayList<Integer>();
+
 			for(int i = 0; i < getAnzahlLadepunkte(); i++) {
-				double sizeBox = ((double)leistungen.get(i) / totalCalculation) * TOTAL_HEIGHT_BOXES;
+				double currentSize = ((double)leistungen.get(i) / totalCalculation) * TOTAL_HEIGHT_BOXES;
 				if(i != 0) {
-					sizeBox -= 1;
+					currentSize -= 1;
 				}
-				if(sizeBox < 7 && (leistungen.get(i) > 0)) {
-					countPiccolos++;
-					piccoloPositions.add(i);
+				if(currentSize < 7 && (leistungen.get(i) > 0)) {
+					countTooSmallValues++;
+					tooSmallValuesPositions.add(i);
 				}
-				boxes.get(i).setHeight(sizeBox);
+				boxes.get(i).setHeight(currentSize);
 				boxes.get(i).setY(position);
-				position += boxes.get(i).getHeight() + 1;  
+				position += boxes.get(i).getHeight() + 1;  //calculate new position
 			}
-			if(countPiccolos > 0) {
+
+			//if tooSmallValues exist
+			if(countTooSmallValues > 0) {
 				double sumNewHeights = 0;
-				position = 41.1;
-				double totalHeightPiccolos = 0;
-				for (Integer index : piccoloPositions) {
-					totalHeightPiccolos += boxes.get(index).getHeight();
+				double totalHeightTooSmallValues = 0;
+				position = 41.1; //set position to default value
+
+				//calculate total Height of all values which are too small (smaller than 7)
+				for (Integer index : tooSmallValuesPositions) {
+					totalHeightTooSmallValues += boxes.get(index).getHeight();
 				}
-				double totalHeight = TOTAL_HEIGHT_BOXES - (countPiccolos * 7);
-				double totalDifference = (0.175 * countPiccolos) - (totalHeightPiccolos / TOTAL_HEIGHT_BOXES); // %-Satz
+
+				//calculate total height and total difference (to be distributed on other boxes)
+				double totalHeight = TOTAL_HEIGHT_BOXES - (countTooSmallValues * 7);
+				double totalDifference = (0.175 * countTooSmallValues) - (totalHeightTooSmallValues / TOTAL_HEIGHT_BOXES); //%-Satz
+
+				//go through all boxes and resize them (at the ratio of the total difference and its size)
 				for(int j = 0; j < getAnzahlLadepunkte(); j++) {
-					double sizeBox = boxes.get(j).getHeight();
+					double currentSize = boxes.get(j).getHeight();
 					double newHeight = 0;
-					if(sizeBox > 7) {
+					if(currentSize > 7) {
 						double ownHeight = boxes.get(j).getHeight();
 						double percentageOwnHeight = ownHeight / totalHeight;
 						double heightDifference = totalHeight * totalDifference;
 						newHeight = ownHeight - (percentageOwnHeight * heightDifference);
 						sumNewHeights += newHeight;
-						System.out.println("box: " + (j+1));
-						System.out.println("ownHeight: " + ownHeight);
-						System.out.println("percentageOwnHeight: " + percentageOwnHeight);
-						System.out.println("heightDifference: " + heightDifference);
-						System.out.println("newHeight: " + newHeight);
-						System.out.println();
 					} else {
 						newHeight = 7;
-						
 					}
 					if(j == getAnzahlLadepunkte()-1) {
-						newHeight = 81.1 - position;
+						newHeight = sizeTotal - position;
 					}
+					//set new Height and Position of current box
 					boxes.get(j).setHeight(newHeight);
 					boxes.get(j).setY(position);
 					position += boxes.get(j).getHeight() + 1;
-					
 				}
 			}
-		} 
-		
+		}
 	}
 	
 	private void updateTextPosition() {
