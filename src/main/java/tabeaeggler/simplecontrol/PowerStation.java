@@ -1,23 +1,17 @@
 package tabeaeggler.simplecontrol;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
@@ -25,29 +19,27 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextBoundsType;
 import javafx.util.converter.NumberStringConverter;
 
 /**
- * Ampel CustomControl
+ * PowerStation CustomControl
  *
- * @author Dieter Holz
  * @author Tabea Eggler
  * @author Benjamin Huber
+ * @author Dieter Holz (Template)
+
  */
 
 public class PowerStation extends Region {
+    //artboard settings
 	private static final double ARTBOARD_WIDTH = 100;
 	private static final double ARTBOARD_HEIGHT = 100;
-
 	private static final double ASPECT_RATIO = ARTBOARD_WIDTH / ARTBOARD_HEIGHT;
-
 	private static final double MINIMUM_WIDTH = 200;
 	private static final double MINIMUM_HEIGHT = MINIMUM_WIDTH / ASPECT_RATIO;
-
 	private static final double MAXIMUM_WIDTH = 800;
 
-	// colors
+	//colors
 	private static final Color COLOR_GREY = Color.rgb(221, 219, 219);
 	private static final Color COLOR_LIGHTGREY = Color.rgb(243, 243, 243);
 	private static final Color COLOR_BLUE = Color.rgb(73, 91, 115);
@@ -55,7 +47,8 @@ public class PowerStation extends Region {
 	private static final Color COLOR_YELLOW = Color.rgb(192, 174, 154);
 	private static final Color COLOR_BACK = Color.rgb(51, 51, 51);
 	private static final Color COlOR_DISABLED = Color.rgb(85, 85, 85);
-	
+
+	//properties
 	private final IntegerProperty leistung1 = new SimpleIntegerProperty();
 	private final IntegerProperty leistung2 = new SimpleIntegerProperty();
 	private final IntegerProperty leistung3 = new SimpleIntegerProperty();
@@ -65,10 +58,10 @@ public class PowerStation extends Region {
 	private int totalCalculation = 0;
 	private static int TOTAL_HEIGHT_BOXES = 40;
 	
-	private double sizeBox1 = 7;
-	private double sizeBox2 = 7;
-	private double sizeBox3 = 7;
-	private double sizeBox4 = 7;
+	private double sizeBox1;
+	private double sizeBox2;
+	private double sizeBox3;
+	private double sizeBox4;
 	
 	private ArrayList<Rectangle> boxes;
 	private ArrayList<Integer> leistungen;
