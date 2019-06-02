@@ -1,6 +1,6 @@
-package cuie.project.template_simplecontrol.demo;
+package tabeaeggler.simplecontrol.demo;
 
-import cuie.project.template_simplecontrol.PowerStation;
+import tabeaeggler.simplecontrol.PowerStation;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;

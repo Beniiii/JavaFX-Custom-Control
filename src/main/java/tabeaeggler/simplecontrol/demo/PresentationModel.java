@@ -1,4 +1,4 @@
-package cuie.project.template_simplecontrol.demo;
+package tabeaeggler.simplecontrol.demo;
 
 import javax.swing.text.SimpleAttributeSet;
 
