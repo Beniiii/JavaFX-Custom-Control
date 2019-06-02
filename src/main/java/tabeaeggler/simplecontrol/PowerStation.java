@@ -102,7 +102,6 @@ public class PowerStation extends Region {
 	//needed for resizing
 	private Pane drawingPane;
 
-
 	public PowerStation() {
 		initializeSelf();
 		initializeParts();
@@ -113,7 +112,6 @@ public class PowerStation extends Region {
 		initializer();
 	}
 
-
 	private void initializeSelf() {
 		String fonts = getClass().getResource("/fonts/fonts.css").toExternalForm();
 		getStylesheets().add(fonts);
@@ -123,7 +121,6 @@ public class PowerStation extends Region {
 
 		getStyleClass().add("powerstation");
 	}
-
 
 	private void initializeParts() {
 		centerX =  31.5;
@@ -200,7 +197,6 @@ public class PowerStation extends Region {
         textFields = new ArrayList<>();
 	}
 
-
 	private void initializeDrawingPane() {
 		drawingPane = new Pane();
 		drawingPane.getStyleClass().add("drawing-pane");
@@ -209,13 +205,11 @@ public class PowerStation extends Region {
 		drawingPane.setPrefSize(ARTBOARD_WIDTH, ARTBOARD_HEIGHT);
 	}
 
-
 	private void layoutParts() {
 		drawingPane.getChildren().addAll(frame, socket, boxTotal, box1, box2, box3, box4,
                 svgGroup, elektrode1, elektrode2, txtTotal, txtLeistung1, txtLeistung2, txtLeistung3, txtLeistung4);
 		getChildren().add(drawingPane);
 	}
-
 
 	private void setupValueChangeListeners() {
 		anzahlLadepunkte.addListener((observable, oldValue, newValue) -> {
@@ -284,7 +278,6 @@ public class PowerStation extends Region {
 		});
 	}
 
-
 	private void setupBinding() {
 		txtLeistung1.setTextFormatter(new TextFormatter<>(change ->
         (change.getControlNewText().matches("([1-9][0-9]*)?")) ? change : null)); //only numbers allowed
@@ -303,14 +296,36 @@ public class PowerStation extends Region {
 		txtLeistung4.textProperty().bindBidirectional(leistung4Property(), new NumberStringConverter());
 	}
 
+	//*Helper Methods*
 
-	//Helper Methods
-	
 	public void calculateTotal() {
-		totalCalculation = leistung1.get() + leistung2.get() + leistung3.get() + leistung4.get();
+		totalCalculation = getLeistung1() + getLeistung2() + getLeistung3() + getLeistung4();
 		txtTotal.setText("Total:"+ '\n' + Integer.toString(totalCalculation) + " kW");
     }
-	
+
+	private void initializer() {
+		if(getLeistung1() <= 0) {
+			txtLeistung1.setVisible(false);
+			box1.setHeight(0);
+		}
+		if(getLeistung2() <= 0) {
+			txtLeistung2.setVisible(false);
+			box2.setHeight(0);
+		}
+		if(getLeistung3() <= 0) {
+			txtLeistung3.setVisible(false);
+			box3.setHeight(0);
+		}
+		if(getLeistung4() <= 0) {
+			txtLeistung4.setVisible(false);
+			box4.setHeight(0);
+		}
+		updateArrays();
+		calculateTotal();
+		changeBoxSize();
+		updateTextPosition();
+	}
+
 	public void changeBoxSize() {
 		if(totalCalculation > 0) {
 			double position = 41.1;
@@ -370,7 +385,7 @@ public class PowerStation extends Region {
 			}
 		}
 	}
-	
+
 	private void updateTextPosition() {
 		for(int i = 0; i < textFields.size(); i++) {
 			double position = boxes.get(i).getY() + (boxes.get(i).getHeight() / 2) - (textFields.get(i).getHeight() / 2);
@@ -391,11 +406,14 @@ public class PowerStation extends Region {
 			}
 		}
 	}
-	
+
 	private void updateArrays() {
+		//clear arrays to ensure that amount of ladepunkte is correct
 		boxes.clear();
 		leistungen.clear();
 		textFields.clear();
+
+		//fill arrays (dependent on amount of ladepunkte)
 		switch (getAnzahlLadepunkte()) {
     	case 1: 
     		boxes.add(box1);
@@ -447,29 +465,6 @@ public class PowerStation extends Region {
     		break;
     	}
 	}
-	
-	private void initializer() {
-		if(getLeistung1() <= 0) {
-			txtLeistung1.setVisible(false);
-			box1.setHeight(0);
-		}
-		if(getLeistung2() <= 0) {
-			txtLeistung2.setVisible(false);
-			box2.setHeight(0);
-		}
-		if(getLeistung3() <= 0) {
-			txtLeistung3.setVisible(false);
-			box3.setHeight(0);
-		}
-		if(getLeistung4() <= 0) {
-			txtLeistung4.setVisible(false);
-			box4.setHeight(0);
-		}
-		updateArrays();
-		calculateTotal();
-		changeBoxSize();
-		updateTextPosition();
-	}
 
 	// resize by scaling
 	@Override
@@ -495,9 +490,7 @@ public class PowerStation extends Region {
 		}
 	}
 
-	// alle getter und setter (generiert via "Code -> Generate... -> Getter and
-	// Setter)
-
+	//all getter und setter
 	public int getLeistung1() {
 		return leistung1.get();
 	}
@@ -543,5 +536,4 @@ public class PowerStation extends Region {
     public IntegerProperty anzahlLadepunkteProperty () {
         return anzahlLadepunkte;
     }
-	
 }
