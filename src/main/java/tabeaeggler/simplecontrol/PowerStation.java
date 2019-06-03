@@ -236,32 +236,31 @@ public class PowerStation extends Region {
 				lblKw3.setVisible(false);
 				lblKw4.setVisible(false);
 			}
-			if(oldValue.intValue() < newValue.intValue()) {
-				if(newValue.intValue() == 1) {
-					box2.setHeight(0);
-					box3.setHeight(0);
-					box4.setHeight(0);
-					txtLeistung2.setVisible(false);
-					txtLeistung3.setVisible(false);
-					txtLeistung4.setVisible(false);
-					lblKw2.setVisible(false);
-					lblKw3.setVisible(false);
-					lblKw4.setVisible(false);
-				}
-				if(newValue.intValue() == 2) {
-					box3.setHeight(0);
-					box4.setHeight(0);
-					txtLeistung3.setVisible(false);
-					txtLeistung4.setVisible(false);
-					lblKw3.setVisible(false);
-					lblKw4.setVisible(false);
-				}
-				if(newValue.intValue() == 3) {
-					box4.setHeight(0);
-					txtLeistung4.setVisible(false);
-					lblKw4.setVisible(false);
-				}
+			if(newValue.intValue() == 1) {
+				box2.setHeight(0);
+				box3.setHeight(0);
+				box4.setHeight(0);
+				txtLeistung2.setVisible(false);
+				txtLeistung3.setVisible(false);
+				txtLeistung4.setVisible(false);
+				lblKw2.setVisible(false);
+				lblKw3.setVisible(false);
+				lblKw4.setVisible(false);
 			}
+			if(newValue.intValue() == 2) {
+				box3.setHeight(0);
+				box4.setHeight(0);
+				txtLeistung3.setVisible(false);
+				txtLeistung4.setVisible(false);
+				lblKw3.setVisible(false);
+				lblKw4.setVisible(false);
+			}
+			if(newValue.intValue() == 3) {
+				box4.setHeight(0);
+				txtLeistung4.setVisible(false);
+				lblKw4.setVisible(false);
+			}
+
 			updateArrays();
 			changeBoxSize();
 			updateTextPosition();
