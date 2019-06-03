@@ -6,6 +6,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
@@ -72,6 +73,7 @@ public class PowerStation extends Region {
 	private ArrayList<Rectangle> boxes;
 	private ArrayList<Integer> leistungen;
 	private ArrayList<TextField> textFields;
+	private ArrayList<Label> labels;
 
 	// shapes
 	private Rectangle frame;
@@ -88,6 +90,10 @@ public class PowerStation extends Region {
 	private TextField txtLeistung2;
 	private TextField txtLeistung3;
 	private TextField txtLeistung4;
+	private Label lblKw1;
+	private Label lblKw2;
+	private Label lblKw3;
+	private Label lblKw4;
 	private Group svgGroup;
 	private Line elektrode1;
 	private Line elektrode2;
@@ -131,6 +137,15 @@ public class PowerStation extends Region {
         txtLeistung3.getStyleClass().addAll("text-leistung");
         txtLeistung4 = new TextField();
         txtLeistung4.getStyleClass().addAll("text-leistung");
+        
+        lblKw1 = new Label("kW");
+        lblKw1.getStyleClass().addAll("text-leistung");
+        lblKw2 = new Label("kW");
+        lblKw2.getStyleClass().addAll("text-leistung");
+        lblKw3 = new Label("kW");
+        lblKw3.getStyleClass().addAll("text-leistung");
+        lblKw4 = new Label("kW");
+        lblKw4.getStyleClass().addAll("text-leistung");
 
         txtTotal = new Text();
         txtTotal.setX(40);
@@ -188,6 +203,7 @@ public class PowerStation extends Region {
         boxes = new ArrayList<>();
         leistungen = new ArrayList<>();
         textFields = new ArrayList<>();
+        labels = new ArrayList<>();
 	}
 
 	private void initializeDrawingPane() {
@@ -200,7 +216,7 @@ public class PowerStation extends Region {
 
 	private void layoutParts() {
 		drawingPane.getChildren().addAll(frame, socket, boxTotal, box1, box2, box3, box4,
-                svgGroup, elektrode1, elektrode2, txtTotal, txtLeistung1, txtLeistung2, txtLeistung3, txtLeistung4);
+                svgGroup, elektrode1, elektrode2, txtTotal, txtLeistung1, txtLeistung2, txtLeistung3, txtLeistung4, lblKw1, lblKw2, lblKw3, lblKw4);
 		getChildren().add(drawingPane);
 	}
 
@@ -215,6 +231,10 @@ public class PowerStation extends Region {
 				txtLeistung2.setVisible(false);
 				txtLeistung3.setVisible(false);
 				txtLeistung4.setVisible(false);
+				lblKw1.setVisible(false);
+				lblKw2.setVisible(false);
+				lblKw3.setVisible(false);
+				lblKw4.setVisible(false);
 			}
 			if(oldValue.intValue() < newValue.intValue()) {
 				if(newValue.intValue() == 1) {
@@ -224,16 +244,22 @@ public class PowerStation extends Region {
 					txtLeistung2.setVisible(false);
 					txtLeistung3.setVisible(false);
 					txtLeistung4.setVisible(false);
+					lblKw2.setVisible(false);
+					lblKw3.setVisible(false);
+					lblKw4.setVisible(false);
 				}
 				if(newValue.intValue() == 2) {
 					box3.setHeight(0);
 					box4.setHeight(0);
 					txtLeistung3.setVisible(false);
 					txtLeistung4.setVisible(false);
+					lblKw3.setVisible(false);
+					lblKw4.setVisible(false);
 				}
 				if(newValue.intValue() == 3) {
 					box4.setHeight(0);
 					txtLeistung4.setVisible(false);
+					lblKw4.setVisible(false);
 				}
 			}
 			updateArrays();
@@ -299,18 +325,22 @@ public class PowerStation extends Region {
 	private void initializer() {
 		if(getLeistung1() <= 0) {
 			txtLeistung1.setVisible(false);
+			lblKw1.setVisible(false);
 			box1.setHeight(0);
 		}
 		if(getLeistung2() <= 0) {
 			txtLeistung2.setVisible(false);
+			lblKw2.setVisible(false);
 			box2.setHeight(0);
 		}
 		if(getLeistung3() <= 0) {
 			txtLeistung3.setVisible(false);
+			lblKw3.setVisible(false);
 			box3.setHeight(0);
 		}
 		if(getLeistung4() <= 0) {
 			txtLeistung4.setVisible(false);
+			lblKw4.setVisible(false);
 			box4.setHeight(0);
 		}
 		updateArrays();
@@ -383,19 +413,24 @@ public class PowerStation extends Region {
 		for(int i = 0; i < textFields.size(); i++) {
 			double position = boxes.get(i).getY() + (boxes.get(i).getHeight() / 2) - (textFields.get(i).getHeight() / 2);
 			textFields.get(i).setLayoutY(position);
+			labels.get(i).setLayoutY(position);
 			int value = leistungen.get(i);
 			if(value <= 0) {
 				textFields.get(i).setVisible(false);
+				labels.get(i).setVisible(false);
 				boxes.get(i).setHeight(0);
 			}
 			if(0 < value && value <= 9) {
-				textFields.get(i).setLayoutX(45);
+				textFields.get(i).setLayoutX(41);
+				labels.get(i).setLayoutX(textFields.get(i).getLayoutX() + 7.5);
 			}
 			if(10 <= value && value <= 99) {
-				textFields.get(i).setLayoutX(43.5);
+				textFields.get(i).setLayoutX(39.5);
+				labels.get(i).setLayoutX(textFields.get(i).getLayoutX() + 7.5 + 2.6);
 			}
 			if(100 <= value && value <= 999) {
-				textFields.get(i).setLayoutX(42);
+				textFields.get(i).setLayoutX(38);
+				labels.get(i).setLayoutX(textFields.get(i).getLayoutX() + 7.5  + 5.2);
 			}
 		}
 	}
@@ -405,6 +440,7 @@ public class PowerStation extends Region {
 		boxes.clear();
 		leistungen.clear();
 		textFields.clear();
+		labels.clear();
 
 		//fill arrays (dependent on amount of ladepunkte)
 		switch (getAnzahlLadepunkte()) {
@@ -412,7 +448,9 @@ public class PowerStation extends Region {
     		boxes.add(box1);
     		leistungen.add(getLeistung1());
     		textFields.add(txtLeistung1);
+    		labels.add(lblKw1);
     		txtLeistung1.setVisible(true);
+    		lblKw1.setVisible(true);
     		break;
     	case 2: 
     		boxes.add(box1);
@@ -421,8 +459,12 @@ public class PowerStation extends Region {
     		leistungen.add(getLeistung2());
     		textFields.add(txtLeistung1);
     		textFields.add(txtLeistung2);
+    		labels.add(lblKw1);
+    		labels.add(lblKw2);
     		txtLeistung1.setVisible(true);
     		txtLeistung2.setVisible(true);
+    		lblKw1.setVisible(true);
+    		lblKw2.setVisible(true);
     		break;
     	case 3: 
     		boxes.add(box1);
@@ -434,9 +476,15 @@ public class PowerStation extends Region {
     		textFields.add(txtLeistung1);
     		textFields.add(txtLeistung2);
     		textFields.add(txtLeistung3);
+    		labels.add(lblKw1);
+    		labels.add(lblKw2);
+    		labels.add(lblKw3);
     		txtLeistung1.setVisible(true);
     		txtLeistung2.setVisible(true);
     		txtLeistung3.setVisible(true);
+    		lblKw1.setVisible(true);
+    		lblKw2.setVisible(true);
+    		lblKw3.setVisible(true);
     		break;
     	case 4: 
     		boxes.add(box1);
@@ -451,10 +499,18 @@ public class PowerStation extends Region {
     		textFields.add(txtLeistung2);
     		textFields.add(txtLeistung3);
     		textFields.add(txtLeistung4);
+    		labels.add(lblKw1);
+    		labels.add(lblKw2);
+    		labels.add(lblKw3);
+    		labels.add(lblKw4);
     		txtLeistung1.setVisible(true);
     		txtLeistung2.setVisible(true);
     		txtLeistung3.setVisible(true);
     		txtLeistung4.setVisible(true);
+    		lblKw1.setVisible(true);
+    		lblKw2.setVisible(true);
+    		lblKw3.setVisible(true);
+    		lblKw4.setVisible(true);
     		break;
     	}
 	}
