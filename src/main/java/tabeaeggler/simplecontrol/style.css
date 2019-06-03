@@ -1,6 +1,6 @@
 .powerstation {
     -fx-padding: 5;
-    -fx-background-color: rgb(12, 12, 12);
+    -fx-background-color: rgba(12, 12, 12, 0);
     -base-color: rgb(2, 138, 204);
     -color-grey: rgb(221, 219, 219);
     -color-lightgrey: rgba(243, 243, 243, 0.73);
